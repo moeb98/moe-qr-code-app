@@ -196,8 +196,8 @@ html {
   padding: 0;
   margin: 0;
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #000;
+  font-family: Verdana, sans-serif;
+  background-color:white;
 }
 
 #app {
@@ -243,7 +243,7 @@ html {
   #qrReader {
     video {
       height: 100%;
-      width: 100%;
+      width: 93%;
     }
   }
 
@@ -277,7 +277,7 @@ html {
       margin: 50px 0;
     }
     .contact {
-      border: 1px solid #ccc;
+      border: 1px solid #7a7a7a;
       padding: 10px;
       margin: 10px 0;
       line-height: 1.25;
@@ -287,7 +287,7 @@ html {
         margin-bottom: 5px;
       }
       .contact-email {
-        // kein besonderes Styling
+        font-style: italic;
       }
       .contact-phone {
         font-style: italic;
