@@ -21,7 +21,7 @@
 
     <!-- own profile -->
     <div id="profile">
-      <h3>My  profile</h3>
+      <h3>My profile</h3>
       <h6>Name</h6>
       <input type="text" placeholder="first and last name" v-model="profile.name" />
       <h6>Mail</h6>
@@ -59,21 +59,21 @@ import contactService from '@/services/contactService';
 export default {
   data() {
     return {
-      // Booleans für die Fenster, die zwischendurch angezeigt werden
+      // boolean variables to keep track of pop-up windows being shown
       showQrDisplay: false,
       showQrReader: false,
 
-      // MD5-Hash des Kontakts, der angezeigt wird (nur zur Kontrolle)
+      // MD5 hash of the contact currently shown (only for validation)
       contactToDisplay: null,
 
-      // eigenes Profil
+      // own profile
       profile: {
         name: null,
         email: null,
         phone: null,
       },
 
-      // Liste der gescannten Kontakte
+      // list of scanned contacts
       contacts: [],
     };
   },
