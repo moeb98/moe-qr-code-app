@@ -83,23 +83,23 @@ export default {
     ...contactService,
     ...profileService,
 
-    // lädt Daten von den Services in den View
+    // load data from the contact and profile services into the view
     loadData() {
       this.contacts = this.getContacts().reverse();
       this.profile = this.getProfile();
     },
 
-    // Kontakt mithilfe des Services löschen
+    // delete contact via our service
     clickDelete(contactId) {
       this.deleteContact(contactId);
       this.loadData();
     },
 
-    // QR Code einlesen
+    // read QR code
     async readQrCode() {
       this.showQrReader = true;
 
-      // das Video von der Webcam wird in einem HTML-Element angezeigt
+      // show webcam video in HTML element
       const qrReaderVideo = document.getElementById('qrReaderVideo');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
@@ -108,12 +108,12 @@ export default {
       qrReaderVideo.srcObject = stream;
       qrReaderVideo.play();
 
-      // mit einem Intervall von 10 Millisekunden wird das Video auf QR-Codes geprüft
+      // set interval in which video is checked for QR codes to 10ms
       const interval = setInterval(() => this.checkForQrCode(qrReaderVideo, stream, interval), 10);
     },
 
     checkForQrCode(video, stream, interval) {
-      // die Prüfung findet erst statt, wenn das Video läuft
+      // only start to check video for QR codes when enough video data is available
       if (video.readyState !== video.HAVE_ENOUGH_DATA) {
         return;
       }
