@@ -1,62 +1,79 @@
 <template>
   <div id="app">
-    <!-- Toolbar -->
+
+    <tabs @changed="tabChanged">
+      <tab name="vCard" title="vCard">
+        <!-- profile -->
+        <div id="profile">
+          <h3>My profile</h3>
+          <h6>Name</h6>
+          <input id="vcard_name" type="text" placeholder="first and last name" v-model="profile.name" />
+          <h6>Mail</h6>
+          <input id="vcard_email" type="email" placeholder="mail address" v-model="profile.email" />
+          <h6>Phone</h6>
+          <input id="vcard_phone" type="tel" placeholder="phone number" v-model="profile.phone" />
+        </div>
+      </tab>
+
+      <tab name="URL" title="URL">
+        <!-- profile -->
+        <div id="profile">
+          <h3>URL</h3>
+          <h6>Name</h6>
+          <input id="url_name" type="text" placeholder="name" v-model="profile.name" />
+          <h6>URL</h6>
+          <input id="url_url" type="text" placeholder="url" v-model="profile.url" />
+        </div>
+      </tab>
+    </tabs>
+    
+    <!-- toolbar -->
     <div id="toolbar">
-      <button @click="readQrCode">Read new QR code</button>
-    </div>
+      <button @click="saveQrCode()">Save QR code</button>
+    </div>  
+
+    <!-- modal dialog for QR download  -->
     <div id="qrDisplayModal" class="modal" :hidden="!showQrDisplay">
       <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
       <canvas id="qrDisplay"></canvas>
       <center>
-        <pre>{{contactToDisplay}}</pre>
+        <pre>{{qrToDisplay}}</pre>
+        <input type="button" id="downloadButton" @click="downloadQrCode()" value="Download" />
       </center>
     </div>
 
-    <!-- QR Reader -->
-    <div id="qrReader" class="modal" :hidden="!showQrReader">
-      <div class="close-modal" @click="showQrReader = !showQrReader">X</div>
-      <video id="qrReaderVideo"></video>
-      <canvas id="qrReaderImage" hidden></canvas>
-    </div>
-
-    <!-- own profile -->
     <div id="profile">
-      <h3>My profile</h3>
-      <h6>Name</h6>
-      <input type="text" placeholder="first and last name" v-model="profile.name" />
-      <h6>Mail</h6>
-      <input type="email" placeholder="mail address" v-model="profile.email" />
-      <h6>Phone</h6>
-      <input type="tel" placeholder="phone number" v-model="profile.phone" />
-      <canvas id="myQrDisplay"></canvas>
-    </div>
-
-    <!-- list of contacts -->
+      <keep-alive><canvas id="myQrDisplay"></canvas></keep-alive>
+    </div>  
     <div id="contacts">
       <h3>Contacts</h3>
-      <div id="no-contacts" v-if="contacts.length == 0">No contacts yet.</div>
+      <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
 
-      <div class="contact" v-for="c in contacts" :key="c.id">
+      <div class="contact" v-for="c in content" :key="c.id">
         <div class="contact-name">{{c.name}}</div>
         <div class="contact-email">{{c.email}}</div>
         <div class="contact-phone">{{c.phone}}</div>
+        <div class="contact-phone">{{c.url}}</div>
         <div class="contact-toolbar">
-          <button @click="displayQrCode(c)">Share contact</button>
-          <button @click="clickDelete(c.id)">Delete contact</button>
+          <button @click="displayQrCode(c, 'qrDisplay')">Share</button>
+          <button @click="clickDelete(c.id)">Delete</button>
         </div>
       </div>
-    </div>
+    </div>    
+
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcode';
-import jsQR from 'jsqr';
 import md5 from 'md5';
 import profileService from '@/services/profileService';
 import contactService from '@/services/contactService';
+import Tabs from "./Tabs.vue";
+import Tab from "./Tab.vue";
 
-export default {
+export default {  
+  components: { Tabs, Tab },
   data() {
     return {
       // boolean variables to keep track of pop-up windows being shown
@@ -64,17 +81,19 @@ export default {
       showQrReader: false,
 
       // MD5 hash of the contact currently shown (only for validation)
-      contactToDisplay: null,
+      qrToDisplay: null,
 
       // own profile
       profile: {
         name: null,
         email: null,
         phone: null,
+        url: null,
+        type: null,
       },
 
-      // list of scanned contacts
-      contacts: [],
+      // list of all conent
+      content: [],
     };
   },
 
@@ -83,88 +102,72 @@ export default {
     ...contactService,
     ...profileService,
 
+    tabChanged(selectedTab) {
+      this.profile.type = selectedTab.tab.name;
+      this.profile.name = "";
+      this.profile.phone = "";
+      this.profile.email = "";
+      this.profile.url = "";
+      // this.loadData();
+      // const myQrDisplay = document.getElementById('myQrDisplay');
+      // QRCode.toCanvas(myQrDisplay, JSON.stringify(this.profile));
+    },
+    
     // load data from the contact and profile services into the view
     loadData() {
-      this.contacts = this.getContacts().reverse();
+      this.content = this.getContacts().reverse();
       this.profile = this.getProfile();
     },
 
+    downloadQrCode() {
+      const myCanvas = document.getElementById('qrDisplay');
+      const img = document.getElementById('qrDisplay').getElementsByTagName('img');
+      img.src = myCanvas.toDataURL('image/jpg');
+      const a = document.createElement('a');
+      // Set the href attribute of the a tag (turn the canvas into a png image)
+      a.href = img.src;
+      a.download = 'qrcode';
+      a.click();
+    },
+
     // delete contact via our service
-    clickDelete(contactId) {
-      this.deleteContact(contactId);
+    clickDelete(contact) {
+      this.deleteContact(contact);
       this.loadData();
     },
 
-    // read QR code
-    async readQrCode() {
-      this.showQrReader = true;
-
-      // show webcam video in HTML element
-      const qrReaderVideo = document.getElementById('qrReaderVideo');
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
-        audio: false,
-      });
-      qrReaderVideo.srcObject = stream;
-      qrReaderVideo.play();
-
-      // set interval in which video is checked for QR codes to 10ms
-      const interval = setInterval(() => this.checkForQrCode(qrReaderVideo, stream, interval), 10);
-    },
-
-    checkForQrCode(video, stream, interval) {
-      // only start to check video for QR codes when enough video data is available
-      if (video.readyState !== video.HAVE_ENOUGH_DATA) {
-        return;
-      }
-
-      const qrReaderImage = document.getElementById('qrReaderImage');
-      const height = qrReaderImage.height = video.videoHeight;
-      const width = qrReaderImage.width = video.videoWidth;
-
-      // Standbild wird aus dem Video erzeugt
-      qrReaderImage.getContext('2d').drawImage(video, 0, 0, width, height);
-      const { data } = qrReaderImage.getContext('2d').getImageData(0, 0, width, height);
-
-      // Standbild wird in die QR-Funktion übergeben
-      const code = jsQR(data, width, height);
-
-      // es wurde ein QR-Code gefunden, also wird der Kontakt angelegt
-      if (code && code.data.length > 1) {
-        this.createContact(JSON.parse(code.data));
-        this.loadData();
-        this.showQrReader = false;
-      }
-
-      // der Reader wurde geschlossen, also werden das Intervall & Video beendet
-      if (this.showQrReader == false) {
-        clearInterval(interval);
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-        video.srcObject = null;
-      }
+    // save QR code
+    saveQrCode() {
+      this.createContact(this.getProfile());
+      this.loadData();
     },
 
     // QR-Code für Kontakt anzeigen
-    displayQrCode(contact) {
-      contact = JSON.stringify({
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-      });
-
-      const qrDisplay = document.getElementById('qrDisplay');
+    displayQrCode(contact, elementId) {
+      if (contact.type == 'URL') {
+        contact = JSON.stringify({
+          url: contact.url,
+        });
+      } else {
+        contact = JSON.stringify({
+          name: contact.name,
+          email: contact.email,
+          phone: contact.phone,
+        });
+      }
+      const qrDisplay = document.getElementById(elementId);
 
       // der Kontakt wird per JSON-String als QR-Code angezeigt
       QRCode.toCanvas(qrDisplay, contact);
-      this.contactToDisplay = md5(contact);
+      this.qrToDisplay = md5(contact);
       this.showQrDisplay = true;
     },
 
-    displayMyQrCode() {
-      const myQrDisplay = document.getElementById('myQrDisplay');
-      QRCode.toCanvas(myQrDisplay, JSON.stringify(this.profile));
+    displayMyQrCode(payload, elementId) {
+      const myCanvas = document.getElementById(elementId);
+      if (myCanvas != null) {
+        QRCode.toCanvas(myCanvas, JSON.stringify(payload));
+      }
     },
   },
 
@@ -173,7 +176,11 @@ export default {
     profile: {
       handler() {
         this.setProfile(this.profile);
-        this.displayMyQrCode();
+        if (this.profile.type == 'URL') {
+          this.displayMyQrCode(this.profile.url, 'myQrDisplay');
+        } else {
+          this.displayMyQrCode(this.profile, 'myQrDisplay');
+        }
       },
       deep: true,
     },

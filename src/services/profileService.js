@@ -7,6 +7,7 @@ const profileService = {
       name: null,
       email: null,
       phone: null,
+      url: null,
     };
 
     return jsonString ? JSON.parse(atob(jsonString)) : emptyProfile;

@@ -3,6 +3,7 @@ module.exports = {
     // https: true,
     // disableHostCheck: true,
   },
+  /*
   chainWebpack: config => {
     config.resolve.alias.set("vue", "@vue/compat");
 
@@ -25,4 +26,5 @@ module.exports = {
     configureWebpack: {
       devtool: 'source-map'
     }
+    */
 };
