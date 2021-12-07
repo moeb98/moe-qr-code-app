@@ -142,31 +142,35 @@ export default {
       this.loadData();
     },
 
-    // QR-Code für Kontakt anzeigen
-    displayQrCode(contact, elementId) {
-      if (contact.type == 'URL') {
-        contact = JSON.stringify({
-          url: contact.url,
-        });
+    renderData(payload) {
+      if (payload.type == 'URL') {
+        payload = JSON.stringify(payload.url);
       } else {
-        contact = JSON.stringify({
-          name: contact.name,
-          email: contact.email,
-          phone: contact.phone,
+        payload = JSON.stringify({
+          name: payload.name,
+          email: payload.email,
+          phone: payload.phone,
         });
       }
+      return payload;
+    },
+
+    // QR-Code für Kontakt anzeigen
+    displayQrCode(payload, elementId) {
+      const data = this.renderData(payload);
       const qrDisplay = document.getElementById(elementId);
 
       // der Kontakt wird per JSON-String als QR-Code angezeigt
-      QRCode.toCanvas(qrDisplay, contact);
-      this.qrToDisplay = md5(contact);
+      QRCode.toCanvas(qrDisplay, data);
+      this.qrToDisplay = md5(data);
       this.showQrDisplay = true;
     },
 
     displayMyQrCode(payload, elementId) {
+      const data = this.renderData(payload);      
       const myCanvas = document.getElementById(elementId);
       if (myCanvas != null) {
-        QRCode.toCanvas(myCanvas, JSON.stringify(payload));
+        QRCode.toCanvas(myCanvas, data);
       }
     },
   },
@@ -176,11 +180,7 @@ export default {
     profile: {
       handler() {
         this.setProfile(this.profile);
-        if (this.profile.type == 'URL') {
-          this.displayMyQrCode(this.profile.url, 'myQrDisplay');
-        } else {
-          this.displayMyQrCode(this.profile, 'myQrDisplay');
-        }
+        this.displayMyQrCode(this.profile, 'myQrDisplay');
       },
       deep: true,
     },
