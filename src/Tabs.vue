@@ -190,7 +190,7 @@ export default {
   position: relative;
   bottom: -1px;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   letter-spacing: 0.05rem;
 }
 

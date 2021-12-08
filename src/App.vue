@@ -1,67 +1,63 @@
 <template>
-  <div id="app">
-
-    <tabs @changed="tabChanged">
-      <tab name="vCard" title="vCard">
-        <!-- profile -->
-        <div id="profile">
-          <h3>My profile</h3>
-          <h6>Name</h6>
-          <input id="vcard_name" type="text" placeholder="first and last name" v-model="profile.name" />
-          <h6>Mail</h6>
-          <input id="vcard_email" type="email" placeholder="mail address" v-model="profile.email" />
-          <h6>Phone</h6>
-          <input id="vcard_phone" type="tel" placeholder="phone number" v-model="profile.phone" />
-        </div>
-      </tab>
-
-      <tab name="URL" title="URL">
-        <!-- profile -->
-        <div id="profile">
-          <h3>URL</h3>
-          <h6>Name</h6>
-          <input id="url_name" type="text" placeholder="name" v-model="profile.name" />
-          <h6>URL</h6>
-          <input id="url_url" type="text" placeholder="url" v-model="profile.url" />
-        </div>
-      </tab>
-    </tabs>
-    
-    <!-- toolbar -->
-    <div id="toolbar">
-      <button @click="saveQrCode()">Save QR code</button>
-    </div>  
-
-    <!-- modal dialog for QR download  -->
-    <div id="qrDisplayModal" class="modal" :hidden="!showQrDisplay">
-      <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
-      <canvas id="qrDisplay"></canvas>
-      <center>
-        <pre>{{qrToDisplay}}</pre>
-        <input type="button" id="downloadButton" @click="downloadQrCode()" value="Download" />
-      </center>
-    </div>
-
-    <div id="profile">
-      <keep-alive><canvas id="myQrDisplay"></canvas></keep-alive>
-    </div>  
-    <div id="contacts">
-      <h3>Contacts</h3>
-      <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
-
-      <div class="contact" v-for="c in content" :key="c.id">
-        <div class="contact-name">{{c.name}}</div>
-        <div class="contact-email">{{c.email}}</div>
-        <div class="contact-phone">{{c.phone}}</div>
-        <div class="contact-phone">{{c.url}}</div>
-        <div class="contact-toolbar">
-          <button @click="displayQrCode(c, 'qrDisplay')">Share</button>
-          <button @click="clickDelete(c.id)">Delete</button>
-        </div>
+  <tabs @changed="tabChanged">
+    <tab name="vCard" title="vCard">
+      <!-- profile -->
+      <div id="profile">
+        <h4>My profile</h4>
+        <h6>Name</h6>
+        <input id="vcard_name" type="text" placeholder="first and last name" v-model="profile.name" />
+        <h6>Mail</h6>
+        <input id="vcard_email" type="email" placeholder="mail address" v-model="profile.email" />
+        <h6>Phone</h6>
+        <input id="vcard_phone" type="tel" placeholder="phone number" v-model="profile.phone" />
       </div>
-    </div>    
+    </tab>
 
+    <tab name="URL" title="URL">
+      <!-- profile -->
+      <div id="profile">
+        <h4>URL</h4>
+        <h6>Name</h6>
+        <input id="url_name" type="text" placeholder="name" v-model="profile.name" />
+        <h6>URL</h6>
+        <input id="url_url" type="text" placeholder="url" v-model="profile.url" />
+      </div>
+    </tab>
+  </tabs>
+  
+  <!-- toolbar -->
+  <div id="toolbar">
+    <button @click="saveQrCode()">Save QR code</button>
+  </div>  
+
+  <!-- modal dialog for QR download  -->
+  <div id="qrDisplayModal" class="modal" :hidden="!showQrDisplay">
+    <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
+    <canvas id="qrDisplay"></canvas>
+    <center>
+      <pre>{{qrToDisplay}}</pre>
+      <input type="button" id="downloadButton" @click="downloadQrCode()" value="Download" />
+    </center>
   </div>
+
+  <div id="myQrContainer">
+    <keep-alive><canvas id="myQrDisplay"></canvas></keep-alive>
+  </div>  
+  <div id="contacts">
+    <h4>Contacts</h4>
+    <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
+
+    <div class="contact" v-for="c in content" :key="c.id">
+      <div class="contact-name">{{c.name}}</div>
+      <div class="contact-email">{{c.email}}</div>
+      <div class="contact-phone">{{c.phone}}</div>
+      <div class="contact-phone">{{c.url}}</div>
+      <div class="contact-toolbar">
+        <button @click="displayQrCode(c, 'qrDisplay')">Share</button>
+        <button @click="clickDelete(c.id)">Delete</button>
+      </div>
+    </div>
+  </div>    
 </template>
 
 <script>
@@ -204,24 +200,24 @@ html {
   margin: 0;
   height: 100%;
   font-family: Verdana, sans-serif;
-  background-color:white;
+  background-color:rgb(0, 0, 0);
 }
 
 #app {
-  max-width: 400px;
+  max-width: 450px;
   height: 100%;
   overflow: auto;
   margin: auto;
   background-color: white;
-  padding: 40px;
+  padding: 20px 40px 40px 40px;
 
   .modal {
     position: fixed;
     background-color: white;
     top: 0px;
     width: 100%;
-    margin-left: -10px;
-    max-width: 400px;
+    margin-left: -80px;
+    max-width: 450px;
     height: 100%;
     .close-modal {
       cursor: pointer;
@@ -237,6 +233,7 @@ html {
     justify-content: space-around;
     button {
       padding: 10px;
+      margin: 10px;
     }
   }
 
@@ -247,15 +244,8 @@ html {
     }
   }
 
-  #qrReader {
-    video {
-      height: 100%;
-      width: 93%;
-    }
-  }
-
   #profile {
-    h3 {
+    h4 {
       color: #0b27b6;
     }
     h6 {
@@ -266,16 +256,21 @@ html {
       padding: 5px;
       margin: 5px 0;
     }
+  }
+
+  #myQrContainer{
+    width: 100%;
+    text-align: center;
 
     #myQrDisplay {
       margin: 5px 25px;
-      width: calc(100% - 50px) !important;
+      width: calc(60% - 50px) !important;
       height: auto !important;
     }
   }
 
   #contacts {
-    h3 {
+    h4 {
       color: #0b27b6;
     }
     #no-contacts {
