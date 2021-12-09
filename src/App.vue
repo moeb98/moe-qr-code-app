@@ -94,7 +94,7 @@ export default {
   },
 
   methods: {
-    // über Object-Destructuring werden die Funktionen der Services in methods aufgenommen
+    // object-destructuring to add functions of our services in 'methods'
     ...contactService,
     ...profileService,
 
@@ -104,9 +104,6 @@ export default {
       this.profile.phone = "";
       this.profile.email = "";
       this.profile.url = "";
-      // this.loadData();
-      // const myQrDisplay = document.getElementById('myQrDisplay');
-      // QRCode.toCanvas(myQrDisplay, JSON.stringify(this.profile));
     },
     
     // load data from the contact and profile services into the view
@@ -151,12 +148,12 @@ export default {
       return payload;
     },
 
-    // QR-Code für Kontakt anzeigen
+    // show QR code for payload (contact / url)
     displayQrCode(payload, elementId) {
       const data = this.renderData(payload);
       const qrDisplay = document.getElementById(elementId);
 
-      // der Kontakt wird per JSON-String als QR-Code angezeigt
+      // show payload (contact / url) as QR code via its JSON string
       QRCode.toCanvas(qrDisplay, data);
       this.qrToDisplay = md5(data);
       this.showQrDisplay = true;
@@ -172,7 +169,7 @@ export default {
   },
 
   watch: {
-    // immer dann, wenn sich das eigene Profil ändert, sollen die Änderungen gespeichert werden
+    // whenever input changes, update and display those changes in QR code
     profile: {
       handler() {
         this.setProfile(this.profile);
@@ -182,7 +179,7 @@ export default {
     },
   },
 
-  // beim Öffnen der Seite werden die Daten direkt geladen
+  // load data when opening the page
   mounted() {
     this.loadData();
   },
