@@ -1,29 +1,41 @@
-# QR Code App
+# Quasar QR (quasar-qr)
 
-## Project setup
+A Quasar Project
 
+## Install the dependencies
 ```bash
+yarn
+# or
 npm install
 ```
 
-### Compiles and hot-reloads for development
-
+### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-npm run serve
+quasar dev
 ```
 
-### Compiles and minifies for production
 
+### Lint the files
 ```bash
-npm run build
-```
-
-### Lints and fixes files
-
-```bash
+yarn lint
+# or
 npm run lint
 ```
 
-### Customize configuration
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Format the files
+```bash
+yarn format
+# or
+npm run format
+```
+
+
+
+### Build the app for production
+```bash
+quasar build
+```
+
+### Customize the configuration
+See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
