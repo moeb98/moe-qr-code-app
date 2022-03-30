@@ -17,7 +17,7 @@
       <q-separator />
       <q-tab-panels v-model="profile.tab" animated keep-alive>
         <q-tab-panel name="vCard">
-          <div class="q-ma-sm row flex flex-center">
+          <div class="q-ma-sm row flex flex-center" style="min-height: 280px">
             <div class="col-2"></div>
             <div class="col-6">
             <div class="text-h4 q-mb-md text-primary">Profile</div>
@@ -29,7 +29,7 @@
           </div>
         </q-tab-panel>
         <q-tab-panel name="url">
-          <div class="q-ma-sm row flex flex-center">
+          <div class="q-ma-sm row flex flex-center" style="min-height: 280px">
             <div class="col-2"></div>
             <div class="col-6">
               <div class="text-h4 q-mb-md text-primary">URL</div>
@@ -60,7 +60,7 @@
       <div class="q-ma-sm row flex flex-center">
         <div class="col-2"></div>
         <div class="col-6">
-        <div class="text-h4 q-mb-md q-mt-lg text-primary">Storage</div>
+          <div class="text-h4 q-mb-md q-mt-lg text-primary">Storage</div>
         </div>
         <div class="col-2"></div>
       </div>
@@ -91,13 +91,11 @@
       <div class="q-pa-sm"></div>
 
       <!-- modal dialog for QR download  -->
-      <div id="qrDisplayModal" class="modal item-center bg-secondary text-white" :hidden="!showQrDisplay">
+      <div id="qrDisplayModal" :class="{ 'modal item-center bg-black text-white text-center' : $q.dark.isActive, 'modal item-center bg-white text-black text-center' : !$q.dark.isActive }" :hidden="!showQrDisplay">
         <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
-        <center>
-          <canvas id="qrDisplay"></canvas>
-          <pre>{{qrToDisplay}}</pre>
-          <input type="button" id="downloadButton" @click="downloadQrCode()" value="Download" />
-        </center>
+        <canvas id="qrDisplay"></canvas>
+        <pre>{{qrToDisplay}}</pre>
+        <q-btn outline round color="primary" @click="downloadQrCode()" icon="download" />
       </div>         
     </q-card>
   </q-page>
