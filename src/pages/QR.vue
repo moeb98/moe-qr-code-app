@@ -2,24 +2,25 @@
   <q-page class="q-ma-lg">
     <q-card>
       <q-tabs
-        v-model="tab"
-        dense
+        v-model="profile.tab"
+        @update:model-value="tabChanged(profile.tab)"
+        dense: false 
         class="text-grey"
         active-color="primary"
         indicator-color="primary"
-        align="justify"
+        align="center"
         narrow-indicator
       >
         <q-tab name="vCard" label="vCard" />
         <q-tab name="url" label="URL" />
       </q-tabs>
       <q-separator />
-      <q-tab-panels v-model="tab" animated keep-alive>
+      <q-tab-panels v-model="profile.tab" animated keep-alive>
         <q-tab-panel name="vCard">
           <div class="q-ma-sm row flex flex-center">
             <div class="col-2"></div>
             <div class="col-6">
-            <div class="text-h4 q-mb-md text-primary">My profile</div>
+            <div class="text-h4 q-mb-md text-primary">Profile</div>
               <q-input v-model="profile.name" label="name" placeholder="first and last name" class="q-mb-md" />
               <q-input v-model="profile.email" label="e-mail" placeholder="mail address" class="q-mb-md" />
               <q-input v-model="profile.phone" label="phone" placeholder="phone number" />          
@@ -59,7 +60,7 @@
       <div class="q-ma-sm row flex flex-center">
         <div class="col-2"></div>
         <div class="col-6">
-        <div class="text-h4 q-mb-md q-mt-lg text-primary">Contacts</div>
+        <div class="text-h4 q-mb-md q-mt-lg text-primary">Storage</div>
         </div>
         <div class="col-2"></div>
       </div>
@@ -68,17 +69,17 @@
         <div class="col-2"></div>
         <div class="col-6">
           <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
-          <q-list separator bordered class="bg-grey-3">
+          <q-list separator bordered >
             <q-item v-for="c in content" :key="c.id">
               <q-item-section>
-                <div class="contact-name">{{c.name}}</div>
-                <div class="contact-email">{{c.email}}</div>
-                <div class="contact-phone">{{c.phone}}</div>
-                <div class="contact-phone">{{c.url}}</div>
+                <div class="text-weight-bolder">{{c.name}}</div>
+                <div class="text-italic">{{c.email}}</div>
+                <div>{{c.phone}}</div>
+                <div>{{c.url}}</div>
               </q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
-                  <q-btn outline round color="primary" @click="displayQrCode(c, 'qrDisplay')" icon="share" />  
+                  <q-btn outline round color="primary" @click="displayQrCode(c, 'qrDisplay')" icon="download" />  
                   <q-btn outline round color="primary" @click="clickDelete(c.id)" icon="delete" />  
                 </div>
               </q-item-section>
@@ -90,7 +91,7 @@
       <div class="q-pa-sm"></div>
 
       <!-- modal dialog for QR download  -->
-      <div id="qrDisplayModal" class="modal item-center" :hidden="!showQrDisplay">
+      <div id="qrDisplayModal" class="modal item-center bg-secondary text-white" :hidden="!showQrDisplay">
         <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
         <center>
           <canvas id="qrDisplay"></canvas>
@@ -104,7 +105,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { ref } from 'vue'
+// import { ref } from 'vue'
 import QRCode from 'qrcode';
 import md5 from 'md5';
 import profileService from '../services/profileService';
@@ -112,10 +113,10 @@ import contactService from '../services/contactService';
 
 export default defineComponent({
   name: 'QR',
-
+    
   setup () {
     return {
-      tab: ref('vCard')
+      // this.profile.type: ref('vCard')
     }
   },
 
@@ -132,7 +133,7 @@ export default defineComponent({
         email: null,
         phone: null,
         url: null,
-        type: null,
+        tab: null,
       },
       // list of all conent
       content: [],
@@ -144,6 +145,15 @@ export default defineComponent({
     ...contactService,
     ...profileService,
     
+    tabChanged(selectedTab) {
+      if (selectedTab == "url") {
+        this.profile.phone = "";
+        this.profile.email = "";
+      } else {
+        this.profile.url = "";
+      }
+    },
+
     // load data from the contact and profile services into the view
     loadData() {
       this.content = this.getContacts().reverse();
@@ -170,7 +180,7 @@ export default defineComponent({
       this.loadData();
     },
     renderData(payload) {
-      if (payload.type == 'URL') {
+      if (payload.tab == 'url') {
         payload = JSON.stringify(payload.url);
       } else {
         payload = JSON.stringify({
@@ -221,7 +231,8 @@ export default defineComponent({
 
   .modal {
     position: fixed;
-    background-color: rgb(255, 255, 255);
+    // background-color: rgb(255, 255, 255);
+    z-index: 1000 !important;
     top: 50px;
     width: 100%;
     margin-left: -25px;
@@ -241,6 +252,7 @@ export default defineComponent({
       width: 20% !important;
       height: auto !important;
       margin-top: 50px;
+      z-index: 1000 !important;
     }
   }
   
