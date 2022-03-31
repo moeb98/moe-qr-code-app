@@ -96,7 +96,7 @@
         <center>
           <canvas id="qrDisplay"></canvas>
           <pre>{{qrToDisplay}}</pre>
-          <input type="button" id="downloadButton" @click="downloadQrCode()" value="Download" />
+          <q-btn outline round color="primary" @click="downloadQrCode()" icon="download" />
         </center>
       </div>         
     </q-card>
