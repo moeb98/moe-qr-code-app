@@ -171,7 +171,7 @@ export default defineComponent({
     },
     // delete contact via our service
     clickDelete(contact) {
-      $q.dialog({
+      this.$q.dialog({
         title: 'Confirm',
         message: 'Really delete?',
         cancel: true,
