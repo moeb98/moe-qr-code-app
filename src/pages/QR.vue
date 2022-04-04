@@ -177,7 +177,6 @@ export default defineComponent({
         cancel: true,
         persistent: true
       }).onOk(() => {
-        // console.log('>>>> OK')
         this.deleteContact(contact);
         this.loadData();
       })
