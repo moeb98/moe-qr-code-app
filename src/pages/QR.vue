@@ -169,8 +169,16 @@ export default defineComponent({
     },
     // delete contact via our service
     clickDelete(contact) {
-      this.deleteContact(contact);
-      this.loadData();
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Really delete?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.deleteContact(contact);
+        this.loadData();
+      })
+
     },
     // save QR code
     saveQrCode() {
