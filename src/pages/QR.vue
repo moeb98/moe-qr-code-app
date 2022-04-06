@@ -172,8 +172,13 @@ export default defineComponent({
       this.$q.dialog({
         title: 'Confirm',
         message: 'Really delete?',
-
-        cancel: true,
+        ok: {
+          color: 'primary'
+        },
+        cancel: {
+          color: 'primary'
+        },
+        // cancel: true,
         persistent: true
       }).onOk(() => {
         this.deleteContact(contact);
