@@ -89,14 +89,7 @@
         <div class="col-2"></div>
       </div>
       <div class="q-pa-sm"></div>
-
-      <!-- modal dialog for QR download  -->
-      <div id="qrDisplayModal" :class="{ 'modal item-center bg-black text-white text-center' : $q.dark.isActive, 'modal item-center bg-white text-black text-center' : !$q.dark.isActive }" :hidden="!showQrDisplay">
-        <div class="close-modal" @click="showQrDisplay = !showQrDisplay">X</div>
-        <canvas id="qrDisplay"></canvas>
-        <pre>{{qrToDisplay}}</pre>
-        <q-btn outline round color="primary" @click="downloadQrCode()" icon="download" />
-      </div>         
+        
     </q-card>
   </q-page>
 </template>
@@ -108,6 +101,7 @@ import QRCode from 'qrcode';
 import md5 from 'md5';
 import profileService from '../services/profileService';
 import contactService from '../services/contactService';
+import { useQuasar } from 'quasar';
 
 export default defineComponent({
   name: 'QR',
@@ -209,12 +203,38 @@ export default defineComponent({
     },
     // show QR code for payload (contact / url)
     displayQrCode(payload, elementId) {
-      const data = this.renderData(payload);
-      const qrDisplay = document.getElementById(elementId);
-      // show payload (contact / url) as QR code via its JSON string
-      QRCode.toCanvas(qrDisplay, data);
-      this.qrToDisplay = md5(data);
-      this.showQrDisplay = true;
+        const data = this.renderData(payload);
+
+        const printCode = async () => {
+          const a = await QRCode.toDataURL(data);
+          const htmlCode = '<div class="flex flex-center"><img id="qrImg" src="' + a + '" /></div>';
+
+          this.$q.dialog({
+            title: 'Download',
+            message: htmlCode,
+            html: true,
+            ok: {
+
+              label: 'Download'
+            },
+            cancel: {
+
+},
+          }).onOk(() => {
+            const img = document.getElementById('qrImg');
+            const a = document.createElement('a');
+            // Set the href attribute of the a tag (turn the canvas into a png image)
+            a.href = img.src;
+            a.download = 'qrcode';
+            a.click();
+          }).onCancel(() => {
+
+          }).onDismiss(() => {
+
+          })
+        };
+      printCode();
+
     },
     displayMyQrCode(payload, elementId) {
       const data = this.renderData(payload);      
@@ -244,34 +264,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-  .modal {
-    position: fixed;
-    // background-color: rgb(255, 255, 255);
-    z-index: 1000 !important;
-    top: 50px;
-    width: 100%;
-    margin-left: -25px;
-    max-width: 100%;
-    height: 100%;
-    .close-modal {
-      cursor: pointer;
-      padding: 10px;
-      text-align: right;
-      font-weight: normal;
-      font-size: 24px;
-    }
-  }
-
-  #qrDisplayModal {
-    canvas {
-      width: 20% !important;
-      height: auto !important;
-      margin-top: 50px;
-      z-index: 1000 !important;
-    }
-  }
-  
+ 
   #myQrContainer{
     width: 50%;
     text-align: center;
