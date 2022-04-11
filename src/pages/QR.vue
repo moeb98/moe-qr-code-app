@@ -2,8 +2,8 @@
   <q-page class="q-ma-lg">
     <q-card>
       <q-tabs
-        v-model="profile.tab"
-        @update:model-value="tabChanged(profile.tab)"
+        v-model="activeTab"
+        @update:model-value="tabChanged(activeTab)"
         dense: false 
         class="text-grey"
         active-color="primary"
@@ -15,7 +15,7 @@
         <q-tab name="url" label="URL" />
       </q-tabs>
       <q-separator />
-      <q-tab-panels v-model="profile.tab" animated keep-alive>
+      <q-tab-panels v-model="activeTab" animated keep-alive>
         <q-tab-panel name="vCard">
           <div class="q-ma-sm row flex flex-center" style="min-height: 280px">
             <div class="col-2"></div>
@@ -129,6 +129,7 @@ export default defineComponent({
       },
       // list of all conent
       content: [],
+      activeTab: 'vCard',
     };
   },
 
@@ -141,8 +142,10 @@ export default defineComponent({
       if (selectedTab == "url") {
         this.profile.phone = "";
         this.profile.email = "";
+        this.profile.tab = "url";
       } else {
         this.profile.url = "";
+        this.profile.tab = "vCard";
       }
     },
 
@@ -214,11 +217,11 @@ export default defineComponent({
             message: htmlCode,
             html: true,
             ok: {
-
+              color: 'primary',
               label: 'Download'
             },
             cancel: {
-
+              color: 'primary'
 },
           }).onOk(() => {
             const img = document.getElementById('qrImg');
