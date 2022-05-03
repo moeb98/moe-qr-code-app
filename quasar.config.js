@@ -152,9 +152,9 @@ module.exports = configure(function (ctx) {
       
 
       manifest: {
-        name: `Quasar QR`,
-        short_name: `Quasar QR`,
-        description: `A Quasar Project`,
+        name: `moe QR`,
+        short_name: `moe QR`,
+        description: `A QR Code Generator for URLs or contact information`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -219,7 +219,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'quasar-qr'
+        appId: 'moe-qr'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

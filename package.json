@@ -1,9 +1,9 @@
 {
-  "name": "quasar-qr",
+  "name": "moe-qr",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar QR",
-  "author": "",
+  "description": "A QR Code Generator for URLs or contact information",
+  "productName": "moe QR",
+  "author": "moe",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",

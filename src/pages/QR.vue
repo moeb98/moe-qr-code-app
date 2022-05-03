@@ -18,58 +18,48 @@
       <q-tab-panels v-model="activeTab" animated keep-alive>
         <q-tab-panel name="vCard">
           <div class="q-ma-sm row flex flex-center" style="min-height: 280px">
-            <div class="col-2"></div>
-            <div class="col-6">
+            <div class="col-10">
             <div class="text-h4 q-mb-md text-primary">Profile</div>
               <q-input v-model="profile.name" label="name" placeholder="first and last name" class="q-mb-md" />
               <q-input v-model="profile.email" label="e-mail" placeholder="mail address" class="q-mb-md" />
               <q-input v-model="profile.phone" label="phone" placeholder="phone number" />          
             </div>
-            <div class="col-2"></div>
           </div>
         </q-tab-panel>
         <q-tab-panel name="url">
           <div class="q-ma-sm row flex flex-center" style="min-height: 280px">
-            <div class="col-2"></div>
-            <div class="col-6">
+            <div class="col-10">
               <div class="text-h4 q-mb-md text-primary">URL</div>
-              <q-input v-model="profile.name" label="name" placeholder="first and last name" class="q-mb-md" />
+              <q-input v-model="profile.name" label="name" placeholder="name" class="q-mb-md" />
               <q-input v-model="profile.url" label="url" placeholder="url" />
             </div>
-            <div class="col-2"></div>
           </div>        
         </q-tab-panel>
       </q-tab-panels>
 
       <div class="q-ma-sm row flex flex-center">
-        <div class="col-2"></div>
-        <div class="col-6 flex flex-center" id="myQrContainer">
+        <div class="col-10 flex flex-center" id="myQrContainer">
           <keep-alive><canvas id="myQrDisplay" ></canvas></keep-alive>
         </div>
-        <div class="col-2"></div>
       </div>  
 
       <div class="q-ma-sm row flex flex-center">
-        <div class="col-2"></div>
-        <div class="col-6 flex flex-center">
+        <div class="col-10 flex flex-center">
           <q-btn @click="saveQrCode()" icon="save" align="left" class="btn-fixed-width " color="primary" label="Save" />
         </div>
-        <div class="col-2"></div>
       </div>
 
       <div class="q-ma-sm row flex flex-center">
-        <div class="col-2"></div>
-        <div class="col-6">
+        <div class="col-10">
           <div class="text-h4 q-mb-md q-mt-lg text-primary">Storage</div>
         </div>
-        <div class="col-2"></div>
       </div>
 
       <div class="q-ma-sm row flex flex-center q-gutter-sm">
-        <div class="col-2"></div>
-        <div class="col-6">
+        
+        <div class="col-10">
           <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
-          <q-list separator bordered >
+          <q-list separator bordered dense>
             <q-item v-for="c in content" :key="c.id">
               <q-item-section>
                 <div class="text-weight-bolder">{{c.name}}</div>
@@ -79,14 +69,14 @@
               </q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
-                  <q-btn outline round color="primary" @click="displayQrCode(c, 'qrDisplay')" icon="download" />  
-                  <q-btn outline round color="primary" @click="clickDelete(c.id)" icon="delete" />  
+                  <q-btn dense outline round color="primary" @click="displayQrCode(c, 'qrDisplay')" icon="download" />  
+                  <q-btn dense outline round color="primary" @click="clickDelete(c.id)" icon="delete" />  
                 </div>
               </q-item-section>
             </q-item>
           </q-list>
         </div>
-        <div class="col-2"></div>
+        
       </div>
       <div class="q-pa-sm"></div>
         
@@ -274,6 +264,7 @@ export default defineComponent({
     #myQrDisplay {
       margin: 5px 25px;
       width: calc(40% - 50px) !important;
+      min-width: 150px !important;
       height: auto !important;
     }
   }
