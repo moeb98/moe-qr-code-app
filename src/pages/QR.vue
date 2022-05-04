@@ -61,11 +61,11 @@
           <div id="no-contacts" v-if="content.length == 0">No contacts yet.</div>
           <q-list separator bordered dense>
             <q-item v-for="c in content" :key="c.id">
-              <q-item-section>
-                <div class="text-weight-bolder">{{c.name}}</div>
-                <div class="text-italic">{{c.email}}</div>
-                <div>{{c.phone}}</div>
-                <div>{{c.url}}</div>
+              <q-item-section class="truncate">
+                <div class="text-weight-bolder truncate">{{c.name}}</div>
+                <div class="text-italic truncate">{{c.email}}</div>
+                <div class="truncate">{{c.phone}}</div>
+                <div class="truncate">{{c.url}}</div>
               </q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
@@ -267,5 +267,14 @@ export default defineComponent({
       min-width: 150px !important;
       height: auto !important;
     }
+  }
+
+  .truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 </style>
