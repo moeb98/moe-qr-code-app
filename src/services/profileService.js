@@ -8,6 +8,19 @@ const profileService = {
       email: null,
       phone: null,
       url: null,
+      vTitle: null,
+      vFirstName: null,
+      vLastName: null,
+      vStreet: null,
+      vHouseNumber: null,
+      vZip: null,
+      vCity: null,
+      vMobile: null,
+      vWorkPhone: null,
+      vPrivatePhone: null,
+      vEmail: null,
+      vUrl: null,
+      vOrg: null,
     };
 
     return jsonString ? JSON.parse(atob(jsonString)) : emptyProfile;
