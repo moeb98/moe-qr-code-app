@@ -46,22 +46,22 @@
                 <q-input v-model="profile.vLastName" dense label="last name" placeholder="last name" style="width: 35%"/>
               </div>
               <div class="q-gutter-md row items-start">
-                <q-input v-model="profile.vStreet" dense label="street" placeholder="street" class="q-mb-md" style="width: 60%"/>
-                <q-input v-model="profile.vHouseNumber" dense label="number" placeholder="number" class="q-mb-md" style="width: 20%"/>
+                <q-input v-model="profile.vStreet" dense label="street" placeholder="street" class="q-mb-md" style="width: 66%"/>
+                <q-input v-model="profile.vHouseNumber" dense label="number" placeholder="number" class="q-mb-md" style="width: 15%"/>
               </div>
               <div class="q-gutter-md row items-start">
-                <q-input v-model="profile.vZip" dense label="zip" placeholder="zip" class="q-mb-md" style="width: 60%"/>
-                <q-input v-model="profile.vCity" dense label="city" placeholder="city" class="q-mb-md" style="width: 20%"/>
+                <q-input v-model="profile.vZip" dense label="zip" placeholder="zip" class="q-mb-md" style="width: 15%"/>
+                <q-input v-model="profile.vCity" dense label="city" placeholder="city" class="q-mb-md" style="width: 66%"/>
               </div>
               <div class="q-gutter-md row items-start">
-                <q-input v-model="profile.vMobile" dense label="mobile" placeholder="mobile" class="q-mb-md" style="width: 25%"/>
-                <q-input v-model="profile.vWorkPhone" dense label="work" placeholder="work" class="q-mb-md" style="width: 25%"/>
-                <q-input v-model="profile.vPrivatePhone" dense label="private" placeholder="private" class="q-mb-md" style="width: 25%"/>
+                <q-input v-model="profile.vMobile" dense label="mobile" placeholder="mobile" class="q-mb-md" style="width: 26%"/>
+                <q-input v-model="profile.vWorkPhone" dense label="work" placeholder="work" class="q-mb-md" style="width: 27%"/>
+                <q-input v-model="profile.vPrivatePhone" dense label="private" placeholder="private" class="q-mb-md" style="width: 26%"/>
               </div>
               <div class="q-gutter-md row items-start">
-                <q-input v-model="profile.vEmail" dense label="email" placeholder="email" class="q-mb-md" style="width: 25%"/>
-                <q-input v-model="profile.vUrl" dense label="url" placeholder="url" class="q-mb-md" style="width: 25%"/>
-                <q-input v-model="profile.vOrg" dense label="organisation" placeholder="organisation" class="q-mb-md" style="width: 25%"/>
+                <q-input v-model="profile.vEmail" dense label="email" placeholder="email" class="q-mb-md" style="width: 26%"/>
+                <q-input v-model="profile.vUrl" dense label="url" placeholder="url" class="q-mb-md" style="width: 27%"/>
+                <q-input v-model="profile.vOrg" dense label="organisation" placeholder="organisation" class="q-mb-md" style="width: 26%"/>
               </div>
             </div>
           </div>
